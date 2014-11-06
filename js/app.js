@@ -3,6 +3,7 @@ $(document).ready(function () {
     var COUNTDOWN_SECONDS = 3;
     var SERVER_URL = "http://boban.jovanoski.net:8080/save_images";
     var curtainopen = false;
+    var flash = $(".flash");
     var rope = $('.rope');
     var countdown = $('.countdown');
     var inProgress = false;
@@ -63,7 +64,7 @@ $(document).ready(function () {
         Webcam.snap(function (dataUri) {
             photoUris.push(dataUri);
         });
-
+        flash.show().animate({opacity: 0.5}, 300).fadeOut(300);
         countdown.trigger('photo:taken');
     };
 
@@ -142,6 +143,7 @@ $(document).ready(function () {
     });
 
     setCamera();
+    flash.hide();
 
     $("#countdown").click(function (e) {
         e.preventDefault();
