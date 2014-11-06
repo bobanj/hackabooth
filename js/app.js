@@ -15,7 +15,6 @@ $(document).ready(function () {
         autoStart: false,
         callbacks: {
             stop: function () {
-                console.log("STOP THAT SHIT!");
                 countdown.trigger('countdown:finished');
             }
         }
@@ -31,9 +30,7 @@ $(document).ready(function () {
             sendPhotos(photoUris);
             photoUris = [];
         } else {
-            console.log("Start COUNTDOWN!!!");
             var photoTimeout = setTimeout(function () {
-                console.log("PHOTO TAKEN, START COUNTDOWN");
                 startCountdown();
                 clearTimeout(photoTimeout);
             }, 1000)
@@ -88,7 +85,6 @@ $(document).ready(function () {
     };
 
     var curtainsOpened = function () {
-        console.log("CURTAINS OPEN, START COUNTDOWN!!!");
         inProgress = true;
         startCountdown();
     };
