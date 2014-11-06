@@ -1,7 +1,9 @@
 var currentPhotoUris = [];
+var SERVER_URL = "http://boban.jovanoski.net:8080";
+
 function showPhotosCollage (photoUris) {
 	for (var i = 0; i < photoUris.length; i++) {
-		var img = $('<img>', { class: 'photo', src: "http://yelp-mpesce.local:8080" + photoUris[i] });
+		var img = $('<img>', { class: 'photo', src: SERVER_URL + photoUris[i] });
 		img.css({
 			"box-shadow" : "4px 4px 16px 0px #333333"
 		})
@@ -17,7 +19,7 @@ function showPhotosCollage (photoUris) {
 var z = 0;
 function showPhotosPile (photoUris) {
 	for (var i = 0; i < photoUris.length; i++) {
-		var img = $('<img>', { class: 'photo', src: "http://yelp-mpesce.local:8080" + photoUris[i] });
+		var img = $('<img>', { class: 'photo', src: SERVER_URL + photoUris[i] });
 
 		var angle = Math.random() * Math.PI/2 - Math.PI/4;
 
@@ -53,7 +55,7 @@ function showPhotosPile (photoUris) {
 
 function getRecentPhotos() {
 	$.ajax({
-		url : "http://yelp-mpesce.local:8080/recent_images",
+		url : SERVER_URL + "/recent_images",
 		type : "GET",
 		crossDomain: true,
 		success : processPhotos

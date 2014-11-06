@@ -1,6 +1,7 @@
 $(document).ready(function () {
 
     var COUNTDOWN_SECONDS = 3;
+    var SERVER_URL = "http://boban.jovanoski.net/:8080/save_images";
     var curtainopen = false;
     var rope = $('.rope');
     var countdown = $('.countdown');
@@ -46,7 +47,7 @@ $(document).ready(function () {
 
     var sendPhotos = function(photoUris) {
         $.ajax({
-            url : "http://yelp-mpesce.local:8080/save_images",
+            url : SERVER_URL,
             data : {
                 "image_1" : photoUris[0],
                 "image_2" : photoUris[1],
