@@ -25,6 +25,7 @@ storage_path = pjoin(curdir, 'storage')
 
 # ---
 
+
 def compose_images_strip(uid):
     images = []
     for index in xrange(1, num_images + 1):
@@ -45,7 +46,8 @@ def compose_images_strip(uid):
     for index in xrange(0, num_images):
         canvas.paste(images[index], (padding, padding * (index + 1) + index * img_h))
 
-    image_path = pjoin(storage_path, '%d.jpg' % uid)
+    image_path = pjoin(storage_path, 'strip/%d.jpg' % uid)
+    canvas = canvas.convert('L')
     canvas.save(image_path, "JPEG", quality=95, optimize=True, progressive=True)
 
     # canvas.thumbnail((bg_w, bg_h,), Image.ANTIALIAS)
@@ -79,7 +81,7 @@ def compose_images_grid(uid):
             )
         )
 
-    image_path = pjoin(storage_path, '%d.jpg' % uid)
+    image_path = pjoin(storage_path, 'grid/%d.jpg' % uid)
     canvas = canvas.convert('L')
     canvas.save(image_path, "JPEG", quality=95, optimize=True, progressive=True)
 
@@ -88,7 +90,9 @@ def get_images_list():
     from os import listdir
     from os.path import isfile, join
 
-    files_list = [f for f in listdir(storage_path) if isfile(join(storage_path, f))]
+    strip_path = pjoin(storage_path, 'strip')
+
+    files_list = [f for f in listdir(strip_path) if isfile(join(strip_path, f))]
     return files_list
 
 
@@ -122,7 +126,11 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
                 path, tmp = path.split('?', 1)
                 qs = urlparse.parse_qs(tmp)
 
-            image_path = pjoin(storage_path, '%s.jpg' % qs['id'][0])
+            if 'grid' in qs:
+                image_path = pjoin(storage_path, 'grid/%s.jpg' % qs['id'][0])
+            else:
+                image_path = pjoin(storage_path, 'strip/%s.jpg' % qs['id'][0])
+
             self.output_image_file(image_path)
             return
 
@@ -171,11 +179,13 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
 
+        compose_images_strip(uid)
         compose_images_grid(uid)
 
-        return_url = "{'url': '/image?id=%d'}" % uid
+        return_url = "{ 'url': '/image?id=%d' }" % uid
         pprint('return url = %s' % return_url)
         self.wfile.write(return_url)
+
         return
 
 # ---
