@@ -1,12 +1,13 @@
 $(document).ready(function () {
 
+    var COUNTDOWN_SECONDS = 3;
     var curtainopen = false;
     var rope = $('.rope');
     var countdown = $('.countdown');
     var inProgress = false;
     var photoUris = [];
     var shutter = new Audio();
-    var clock = new FlipClock(countdown, 3, {
+    var clock = new FlipClock(countdown, COUNTDOWN_SECONDS, {
         clockFace: 'Counter',
         minimumDigits: 1,
         countdown: true,
@@ -18,9 +19,8 @@ $(document).ready(function () {
             }
         }
     });
-
     shutter.autoplay = false;
-    shutter.src = navigator.userAgent.match(/Firefox/) ? 'audio/shutter.ogg' : 'audio/shutter.mp3';
+    shutter.src = navigator.userAgent.match(/Firefox/) ? 'audio/shutter.ogg' : 'audio/camera.mp3';
 
 
     countdown.on('photo:taken', function () {
@@ -56,23 +56,25 @@ $(document).ready(function () {
             type : "POST",
             crossDomain: true
         });
-    }
+    };
 
     var takePhoto = function () {
         shutter.load();
         shutter.play();
+
         Webcam.snap(function (dataUri) {
             photoUris.push(dataUri);
         });
+
         countdown.trigger('photo:taken');
     };
 
     var setClock = function(){
         var clockTimeout = setTimeout(function () {
-            clock.decrement();
             if (clock.getTime().time == 0) {
                 clock.stop();
             } else {
+                clock.decrement();
                 setClock();
             }
             clearTimeout(clockTimeout);
@@ -80,7 +82,7 @@ $(document).ready(function () {
     };
 
     var startCountdown = function () {
-        clock.setValue(3);
+        clock.setValue(COUNTDOWN_SECONDS);
         setClock();
     };
 
@@ -116,7 +118,7 @@ $(document).ready(function () {
             return false;
         }
         if (curtainopen == false) {
-            clock.setValue(3);
+            clock.setValue(COUNTDOWN_SECONDS);
             rope.stop().animate({top: '0px'}, {queue: false, duration: 350, easing: 'easeOutBounce'});
             $(".leftcurtain").stop().animate({width: '240px'}, 2000);
             $(".rightcurtain").stop().animate({width: '240px'}, 2000, curtainsOpened);

@@ -1,0 +1,23 @@
+body {
+	font-family: Helvetica;
+	background-color: #BBEEBB;
+}
+
+.photos {
+	padding: 16px;
+	background-color: #83d083;
+	border-radius: 16px;
+	-webkit-transition: width 0.5s, height 0.5s;
+    transition: width 0.5s, height 0.5s;
+}
+
+.photos img{
+	margin: 8px;
+    vertical-align:bottom;
+    opacity:0;
+
+    max-width:480px;
+    max-height:480px;
+    width: auto;
+    height: auto;
+}
