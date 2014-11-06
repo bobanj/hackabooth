@@ -1,0 +1,4 @@
+hackabooth
+==========
+
+Simple js photobooth
