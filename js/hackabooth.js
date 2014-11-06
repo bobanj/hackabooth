@@ -21,40 +21,57 @@ $( document ).ready(function() {
 
 var countdownTimer;
 var countdownInterval;
+var countdown = 5;
 var captureInterval;
 var photoUris = [];
 
-function addPhoto() {
+function capture() {
 	Webcam.snap( function(dataUri) {
 		photoUris.push(dataUri);
-		Webcam.freeze();
-		setTimeout(Webcam.unfreeze, 200)
 	} );
 
 	if(photoUris.length >= 4) {
+		//All done!
 		clearInterval(captureInterval);
-		handlePhotos();
+		showPhotos();
 	}
 }
 
 function startCapture() {
-	captureInterval = setInterval(addPhoto, 1000);
+	photoUris = []
+	captureInterval = setInterval(capture, 1000);
+
+	clearInterval(countdownInterval);
 }
 
 function startCountdown() {
+	countdown = 5;
 	countdownTimer = setTimeout(startCapture, 3000);
 	countdownInterval = setInterval(updateCountdown, 1000);
+
+	updateCountdownHtml(countdown);
 }
 
 function updateCountdown() {
-	
+	if(countdown > 0) {
+		countdown--;
+	}
+	updateCountdownHtml(countdown);
 }
 
-function handlePhotos() {
+function updateCountdownHtml(countdown) {
+	$("#countdown").text(countdown)
+}
+
+function showPhotos() {
 	for (var i = 0; i < photoUris.length; i++) {
-		$('#results').append($('<img>', {id: 'img'+i ,src: photoUris[i] }))
+		$('#results').append($('<img>', {id: 'img'+i, 'class':'preview' src: photoUris[i], width:'320px', height:'320px'}))
 	}
-	console.log(photoUris[0].substring(22).substring(0, 20))
+}
+
+function receivePhoto(data) {
+	var imageUrl = data
+	console.log(imageUrl)
 }
 
 function sendPhotos() {
@@ -67,6 +84,9 @@ function sendPhotos() {
 			"image_4" : photoUris[3]
 		},
 		type : "POST",
-		crossDomain: true
+		crossDomain: true,
+		success : function(data) {
+			receivePhoto(data)
+		}
 	});
 }
