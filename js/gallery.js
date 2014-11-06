@@ -1,5 +1,5 @@
 var currentPhotoUris = [];
-var SERVER_URL = "http://boban.jovanoski.net:8080";
+var SERVER_URL = "http://hackabooth.jovanoski.net:8080";
 var imgId = 0;
 
 function showPhotosCollage (photoUris) {
