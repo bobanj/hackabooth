@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     var COUNTDOWN_SECONDS = 3;
-    var SERVER_URL = "http://boban.jovanoski.net/:8080/save_images";
+    var SERVER_URL = "http://boban.jovanoski.net:8080/save_images";
     var curtainopen = false;
     var rope = $('.rope');
     var countdown = $('.countdown');
