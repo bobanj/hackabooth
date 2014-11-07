@@ -6,17 +6,18 @@ import cgi
 import json
 from os import curdir
 from os.path import join as pjoin
+from pprint import pprint
 import urlparse
 import time
 
 from PIL import Image
 
-import fsdir
 
 
 
 
 # ---
+import envoy
 
 num_images = 4
 tmp_storage_path = pjoin(curdir, 'tmp_storage')
@@ -88,14 +89,16 @@ def compose_images_grid(uid):
 def get_images_list():
     strip_path = pjoin(storage_path, 'strip')
 
+    r = envoy.run('ls '+strip_path+' | grep "[.]jpg" | sort -n -r')
+    # pprint('ls '+strip_path+'/*.jpg | sort -n -r')
+    # pprint(r.std_out)
+
     # from os import listdir
     # from os.path import isfile, join
     # files_list = [f for f in listdir(strip_path) if isfile(join(strip_path, f))]
-    entry_list = fsdir.go(strip_path)
-    files_list = []
-    for entry in entry_list:
-        if entry['Type'] == 'F':
-            files_list.append(entry['Path'].split("/")[-1])
+    # entry_list = fsdir.go(strip_path)
+    entry_list = r.std_out.split('\n')[:-1]
+    files_list = map(lambda f: f.split("/")[-1], entry_list)
 
     return files_list
 
