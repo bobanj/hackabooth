@@ -147,7 +147,7 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
 
-        images_list = map(lambda x: '/image?id=' + x[:-4], images_list)
+        images_list = map(lambda x: '/image?id=' + x[:-4], images_list[10:])
         json_txt = json.dumps(images_list)
         self.wfile.write(json_txt)
 
