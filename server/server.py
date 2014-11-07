@@ -151,7 +151,7 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
             path, tmp = path.split('?', 1)
             qs = urlparse.parse_qs(tmp)
 
-        limit = int(qs['limit']) if 'limit' in qs else 20
+        limit = int(qs['limit'][0]) if 'limit' in qs else 20
 
         images_list = get_images_list()
         images_list.sort(reverse=True)
