@@ -64,9 +64,13 @@ $(document).ready(function () {
     };
 
     var showPreview = function(response) {
-        console.log(response)
-        $(".greeting img").attr("src", SERVER_URL + response['url'] + "&grid=1");
-    }
+        var greetingImg = $(".greeting img");
+        greetingImg.hide('fast', function(){
+            var self = $(this);
+            self.attr("src", SERVER_URL + response['url'] + "&grid=1");
+            self.fadeIn();
+        })
+    };
 
     var takePhoto = function () {
         shutter.load();
