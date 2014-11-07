@@ -95,7 +95,7 @@ def get_images_list():
     files_list = []
     for entry in entry_list:
         if entry['Type'] == 'F':
-            files_list.append(entry['Path'])
+            files_list.append(entry['Path'].split("/")[-1])
 
     return files_list
 
