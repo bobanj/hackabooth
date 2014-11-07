@@ -111,6 +111,8 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
             self.get_image()
         elif self.path.startswith('/recent_images'):
             self.get_recent_images()
+        elif self.path.startswith('/gallery'):
+            self.get_gallery_images()
 
     def do_POST(self):
         if self.path == '/save_images':
@@ -152,11 +154,9 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
             qs = urlparse.parse_qs(tmp)
 
         limit = int(qs['limit'][0]) if 'limit' in qs else 20
-        reverse = bool('reverse' in qs)
 
         images_list = get_images_list()
-        images_list.sort(reverse=reverse)
-        sorted_images = images_list[:limit] if reverse else images_list[limit:]
+        images_list.sort(reverse=True)
 
         # TODO: get only the recent ones!!!!!!
 
@@ -165,7 +165,30 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
 
-        images_list = map(lambda x: '/image?id=' + x[:-4], sorted_images)
+        images_list = map(lambda x: '/image?id=' + x[:-4], images_list[:limit])
+        json_txt = json.dumps(images_list)
+        self.wfile.write(json_txt)
+
+    def get_gallery_images(self):
+        qs = {}
+        path = self.path
+        if '?' in path:
+            path, tmp = path.split('?', 1)
+            qs = urlparse.parse_qs(tmp)
+
+        limit = int(qs['limit'][0]) if 'limit' in qs else 20
+
+        images_list = get_images_list()
+        images_list.sort()
+
+        # TODO: get only the recent ones!!!!!!
+
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+
+        images_list = map(lambda x: '/image?id=' + x[:-4], images_list[(len(images_list)-limit):])
         json_txt = json.dumps(images_list)
         self.wfile.write(json_txt)
 
