@@ -2,6 +2,28 @@ body {
     background-image: url("../images/bg.jpg");
 }
 
+.greeting {
+    opacity: 0;
+    text-align: center; 
+    color: #FFFFFF;
+    text-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+
+    z-index: 4;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transition: opacity 0.5s;
+    transition: opacity 0.5s;
+}
+
+.greeting img{
+    max-width:480px;
+    max-height:480px;
+    width: auto;
+    height: auto;
+}
+
 .leftcurtain{
     width: 50%;
     height: 100%;

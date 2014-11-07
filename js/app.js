@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     var COUNTDOWN_SECONDS = 3;
-    var SERVER_URL = "http://hackabooth.jovanoski.net:8080/save_images";
+    var SERVER_URL = "http://hackabooth.jovanoski.net:8080";
     var curtainopen = false;
     var flash = $(".flash");
     var rope = $('.rope');
@@ -45,7 +45,7 @@ $(document).ready(function () {
 
     var sendPhotos = function(photoUris) {
         $.ajax({
-            url : SERVER_URL,
+            url : SERVER_URL + "/save_images",
             data : {
                 "image_1" : photoUris[0],
                 "image_2" : photoUris[1],
@@ -53,9 +53,20 @@ $(document).ready(function () {
                 "image_4" : photoUris[3]
             },
             type : "POST",
-            crossDomain: true
+            crossDomain: true,
+            success : function(data) {
+                showPreview(data)
+            },
+            error : function(data) {
+                console.log(data);
+            }
         });
     };
+
+    var showPreview = function(response) {
+        console.log(response)
+        $(".greeting img").attr("src", SERVER_URL + response['url'] + "&grid=1");
+    }
 
     var takePhoto = function () {
         shutter.load();
@@ -111,6 +122,15 @@ $(document).ready(function () {
         Webcam.attach('#camera');
     };
 
+    var showGreeting = function() {
+        $(".greeting").css({ "opacity" : 1 });
+        var timeout = setTimeout(hideGreeting, 5000);
+    }
+
+    var hideGreeting = function() {
+        $(".greeting").css({ "opacity" : 0 });
+    }
+
     var toggleCurtains = function () {
         if (inProgress) {
             return false;
@@ -120,11 +140,13 @@ $(document).ready(function () {
             rope.stop().animate({top: '0px'}, {queue: false, duration: 350, easing: 'easeOutBounce'});
             $(".leftcurtain").stop().animate({width: '240px'}, 2000);
             $(".rightcurtain").stop().animate({width: '240px'}, 2000, curtainsOpened);
+            hideGreeting();
             curtainopen = true;
         } else {
             rope.stop().animate({top: '-40px'}, {queue: false, duration: 350, easing: 'easeOutBounce'});
             $(".leftcurtain").stop().animate({width: '50%'}, 2000);
             $(".rightcurtain").stop().animate({width: '51%'}, 2000);
+            showGreeting();
             curtainopen = false;
         }
     };
