@@ -156,6 +156,8 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
 
         images_list = get_images_list()
         images_list.sort(reverse=reverse)
+        sorted_images = images_list[:limit] if reverse else images_list[limit:]
+
         # TODO: get only the recent ones!!!!!!
 
         self.send_response(200)
@@ -163,7 +165,7 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
 
-        images_list = map(lambda x: '/image?id=' + x[:-4], images_list[:limit])
+        images_list = map(lambda x: '/image?id=' + x[:-4], sorted_images)
         json_txt = json.dumps(images_list)
         self.wfile.write(json_txt)
 
