@@ -125,6 +125,7 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
         self.wfile.write(f.read())
+        self.wfile.close()
         f.close()
 
     def get_image(self):
@@ -168,6 +169,7 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
         images_list = map(lambda x: '/image?id=' + x[:-4], images_list[:limit])
         json_txt = json.dumps(images_list)
         self.wfile.write(json_txt)
+        self.wfile.close()
 
     def get_gallery_images(self):
         qs = {}
@@ -191,6 +193,7 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
         images_list = map(lambda x: '/image?id=' + x[:-4], images_list[(len(images_list)-limit):])
         json_txt = json.dumps(images_list)
         self.wfile.write(json_txt)
+        self.wfile.close()
 
     def save_images(self):
         form = cgi.FieldStorage(
@@ -226,6 +229,7 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
         json_data = json.dumps({ 'url': '/image?id=%d' % uid })
         # pprint('return url = %s' % return_url)
         self.wfile.write(json_data)
+        self.wfile.close()
 
         return
 
