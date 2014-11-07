@@ -1,9 +1,23 @@
 body {
-    padding-top: 70px; /* Required padding for .navbar-fixed-top. Change if height of navigation changes. */
+    padding-top: 0px;
+    background: #f5f5f1;
+}
+
+.container{
+    padding: 10px 50px;
+    background: white;
+    -webkit-box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
 }
 
 .thumb {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
+}
+.thumbnail{
+    border: none;
+    padding: 14px;
+    -webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
 }
 
 footer {
