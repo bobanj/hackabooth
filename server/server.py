@@ -152,9 +152,10 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
             qs = urlparse.parse_qs(tmp)
 
         limit = int(qs['limit'][0]) if 'limit' in qs else 20
+        reverse = bool('reverse' in qs)
 
         images_list = get_images_list()
-        images_list.sort(reverse=True)
+        images_list.sort(reverse=reverse)
         # TODO: get only the recent ones!!!!!!
 
         self.send_response(200)
