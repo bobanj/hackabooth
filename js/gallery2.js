@@ -37,6 +37,10 @@ $( document ).ready(function() {
                 }
             });
         }
+        var timeout = setTimeout(function(){
+            getRecentPhotos();
+            clearTimeout(timeout);
+        }, 5000);
     }
 //    var swapThumbnailData = function(link){
 //        var image = link.children("img");
@@ -62,6 +66,4 @@ $( document ).ready(function() {
 //    });
 
     getRecentPhotos();
-    //TODO kill setInterval
-    setInterval(getRecentPhotos, 5000);
 });
