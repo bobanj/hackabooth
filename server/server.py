@@ -6,13 +6,12 @@ import cgi
 import json
 from os import curdir
 from os.path import join as pjoin
-from pprint import pprint
 import urlparse
 import time
 
 from PIL import Image
 
-
+import fsdir
 
 
 
@@ -87,12 +86,17 @@ def compose_images_grid(uid):
 
 
 def get_images_list():
-    from os import listdir
-    from os.path import isfile, join
-
     strip_path = pjoin(storage_path, 'strip')
 
-    files_list = [f for f in listdir(strip_path) if isfile(join(strip_path, f))]
+    # from os import listdir
+    # from os.path import isfile, join
+    # files_list = [f for f in listdir(strip_path) if isfile(join(strip_path, f))]
+    entry_list = fsdir.go(strip_path)
+    files_list = []
+    for entry in entry_list:
+        if entry['Type'] == 'F':
+            files_list.append(entry['Path'])
+
     return files_list
 
 
@@ -102,7 +106,7 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path.startswith('/image'):
             self.get_image()
-        elif self.path == '/recent_images':
+        elif self.path.startswith('/recent_images'):
             self.get_recent_images()
 
     def do_POST(self):
@@ -138,6 +142,14 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
             self.send_error(404, 'File Not Found: %s' % self.path)
 
     def get_recent_images(self):
+        qs = {}
+        path = self.path
+        if '?' in path:
+            path, tmp = path.split('?', 1)
+            qs = urlparse.parse_qs(tmp)
+
+        limit = int(qs['limit']) if 'limit' in qs else 20
+
         images_list = get_images_list()
         images_list.sort(reverse=True)
         # TODO: get only the recent ones!!!!!!
@@ -147,7 +159,7 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
 
-        images_list = map(lambda x: '/image?id=' + x[:-4], images_list[:10])
+        images_list = map(lambda x: '/image?id=' + x[:-4], images_list[:limit])
         json_txt = json.dumps(images_list)
         self.wfile.write(json_txt)
 
