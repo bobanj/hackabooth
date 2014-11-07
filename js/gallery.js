@@ -92,7 +92,8 @@ function getRecentPhotos() {
 	$.ajax({
 		url : SERVER_URL + "/recent_images",
 		data: {
-			limit: PHOTO_LIMIT
+			limit: PHOTO_LIMIT,
+			reverse: true
 		},
 		type : "GET",
 		crossDomain: true,
