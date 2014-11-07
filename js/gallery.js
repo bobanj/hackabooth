@@ -96,6 +96,19 @@ function getRecentPhotos() {
 	});
 }
 
+function getAllPhotos() {
+	console.log("Getting ALL photos.")
+	$.ajax({
+		url : SERVER_URL + "/gallery_images",
+		data: {
+			"limit" : 999999,
+		},
+		type : "GET",
+		crossDomain: true,
+		success : processPhotos
+	});
+}
+
 function processPhotos(responsePhotoUris) {
 	var newPhotoUris = responsePhotoUris.filter(function(i) {return currentPhotoUris.indexOf(i) < 0;});
 	if(newPhotoUris.length > 0) {
