@@ -17,6 +17,7 @@ $( document ).ready(function() {
     };
 
     function getRecentPhotos() {
+        console.log("getting stuff");
         $.ajax({
             url : SERVER_URL + "/recent_images",
             type : "GET",
