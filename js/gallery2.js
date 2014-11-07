@@ -41,6 +41,7 @@ $( document ).ready(function() {
                 row.prepend(photoHtml);
                 currentPhotoUris.push(photoUrl);
             });
+            row.find("a:first").click();
         }
         var timeout = setTimeout(function(){
             getRecentPhotos();
