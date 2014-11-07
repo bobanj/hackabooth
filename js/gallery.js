@@ -25,7 +25,7 @@ function showPhotosCollage (photoUris) {
 		}
 
 		img.css({
-			"box-shadow" : "4px 4px 16px 0px #333333"
+			"box-shadow" : "2px 2px 8px 0px #333333"
 		})
 
 		$('.photos').prepend(img);
