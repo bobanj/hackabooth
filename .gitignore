@@ -3,3 +3,5 @@ venv
 .idea
 .DS_Store
 **/.DS_Store
+server/storage/*
+server/tmp_storage/*
