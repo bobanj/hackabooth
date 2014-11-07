@@ -18,8 +18,11 @@ body {
 }
 
 .greeting img{
-    max-width:480px;
-    max-height:480px;
+    -webkit-transform:rotate(5deg);
+    transform:rotate(5deg);
+    box-shadow: 4px 4px 16px rgba(0,0,0,0.5);
+    max-width:360px;
+    max-height:360px;
     width: auto;
     height: auto;
 }
