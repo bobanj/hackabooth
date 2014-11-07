@@ -37,9 +37,11 @@ $( document ).ready(function() {
         var newPhotoUris = responsePhotoUris.filter(function(i) {return currentPhotoUris.indexOf(i) < 0;});
         if(newPhotoUris.length > 0) {
             $.each(newPhotoUris, function(i, photoUrl){
-                var photoHtml = generatePhotoHtml(photoUrl);
-                row.prepend(photoHtml);
-                currentPhotoUris.push(photoUrl);
+                if (i < 3){
+                    var photoHtml = generatePhotoHtml(photoUrl);
+                    row.prepend(photoHtml);
+                    currentPhotoUris.push(photoUrl);
+                }
             });
         }
         var timeout = setTimeout(function(){
@@ -47,6 +49,28 @@ $( document ).ready(function() {
             clearTimeout(timeout);
         }, 5000);
     }
+//    var swapThumbnailData = function(link){
+//        var image = link.children("img");
+//        var pom = image.attr("src");
+//
+//        image.attr("src", link.attr("href"));
+//        link.attr("href", pom);
+//    };
+//    $('.container').on('click', '.thumbnail', function(e){
+//        e.preventDefault();
+//        var link = $(this);
+//        if(!link.hasClass("grid")){
+//            swapThumbnailData(link);
+//            link.addClass("grid");
+//        }
+//    });
+//
+//    $('.container').on('click', '.grid', function(e){
+//        e.preventDefault();
+//        var link = $(this);
+//        swapThumbnailData(link);
+//        link.removeClass("grid");
+//    });
 
     getRecentPhotos();
 });

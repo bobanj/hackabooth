@@ -1,5 +1,6 @@
 var currentPhotoUris = [];
 var SERVER_URL = "http://hackabooth.jovanoski.net:8080";
+var PHOTO_LIMIT = 10;
 var imgId = 0;
 
 // TODO clean up / refactor
@@ -90,6 +91,9 @@ function showPhotosPile (photoUris) {
 function getRecentPhotos() {
 	$.ajax({
 		url : SERVER_URL + "/recent_images",
+		data: {
+			limit: PHOTO_LIMIT
+		},
 		type : "GET",
 		crossDomain: true,
 		success : processPhotos
