@@ -5,6 +5,11 @@ var imgId = 0;
 // TODO clean up / refactor
 
 function showPhotosCollage (photoUris) {
+	$(".photo").each(function() {
+		if($(this).data("clicked") === false) {
+			$(this).attr("src", $(this).data("uri"))
+		}
+	})
 	for (var i = 0; i < photoUris.length; i++) {
 		if(i > 3){
             // Do not load all images at once
@@ -14,6 +19,7 @@ function showPhotosCollage (photoUris) {
 		imgId++;
 
 		img.data("uri", SERVER_URL + photoUris[i])
+		img.data("clicked", false)
 		if(i === photoUris.length - 1) {
 			img.attr("src", img.data("uri") + "&grid=1")
 		}
@@ -28,11 +34,14 @@ function showPhotosCollage (photoUris) {
 		}
 
 		img.on("click", function() {
+			console.log(img.data("clicked"))
 			if($(this).attr("src").indexOf("grid") < 0) {
 				$(this).attr("src", $(this).data("uri") + "&grid=1")
 			} else {
 				$(this).attr("src", $(this).data("uri"))
 			}
+			img.data("clicked", true)
+			console.log(img.data("clicked"))
 			console.log($(this).attr("src"))
 			$('.photos').collagePlus();
 		})
@@ -88,6 +97,10 @@ function getRecentPhotos() {
 }
 
 function processPhotos(responsePhotoUris) {
+	if(currentPhotoUris.length == 0) {
+		//New page! Dirty hack to order pictures!
+		responsePhotoUris = responsePhotoUris.reverse();
+	}
 	var newPhotoUris = responsePhotoUris.filter(function(i) {return currentPhotoUris.indexOf(i) < 0;});
 	if(newPhotoUris.length > 0) {
 		showPhotosCollage(newPhotoUris)
