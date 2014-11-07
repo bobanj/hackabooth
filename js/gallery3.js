@@ -61,7 +61,7 @@ $( document ).ready(function() {
         var newPhotoUris = responsePhotoUris.filter(function(i) {return currentPhotoUris.indexOf(i) < 0;});
         if(newPhotoUris.length > 0) {
             $.each(newPhotoUris, function(i, photoUrl){
-                if (i == 0){
+                if (i > 3){
                     var photoHtml = generatePhotoHtml(photoUrl);
                     var photo = $(photoHtml);
                     var photoRadius = calculateRadius(photo);
@@ -81,8 +81,11 @@ $( document ).ready(function() {
                 }
             });
         }
+        var timeout = setTimeout(function(){
+            getRecentPhotos();
+            clearTimeout(timeout);
+        }, 6000);
     }
 
     getRecentPhotos();
-    setInterval(getRecentPhotos, 5000);
 });
