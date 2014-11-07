@@ -17,11 +17,18 @@ $( document ).ready(function() {
     };
 
     function getRecentPhotos() {
+        console.log("getting stuff");
         $.ajax({
             url : SERVER_URL + "/recent_images",
             type : "GET",
             crossDomain: true,
-            success : processPhotos
+            success : processPhotos,
+            error: function(){
+                var timeout = setTimeout(function(){
+                    getRecentPhotos();
+                    clearTimeout(timeout);
+                }, 5000);
+            }
         });
     };
 
