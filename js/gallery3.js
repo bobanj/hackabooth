@@ -1,17 +1,27 @@
 $( document ).ready(function() {
     var SERVER_URL = "http://hackabooth.jovanoski.net:8080";
     var currentPhotoUris = [];
-    var row = $('.row');
+    var container = $('.container');
+    var containerX = container.outerWidth();
+    var containerY = container.outerHeight();
+    var centerX = $(windows).outerWidth() / 2;
+    var centerY = $(windows).outerHeight() / 2;
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+
+    var getRandomCoordinates = function(){
+
+    };
 
     var generatePhotoHtml = function(photoUrl){
         var photoUrl = SERVER_URL + photoUrl;
         var gridPhotoUrl = photoUrl + '&grid=1';
         var photoHTML = [
-            '<div class="col-lg-3 col-md-4 col-xs-6 thumb">',
-                '<a class="thumbnail" href="', gridPhotoUrl, '" data-lightbox="image">',
-                    '<img class="img-responsive" src="', gridPhotoUrl, '" alt="">',
-                '</a>',
-          '</div>'
+            '<a class="thumbnail" href="', gridPhotoUrl,'">',
+                '<img class="img-responsive" src="', gridPhotoUrl, '" alt="">',
+            '</a>'
         ];
         return photoHTML.join('');
     };
@@ -25,7 +35,6 @@ $( document ).ready(function() {
         });
     };
 
-
     function processPhotos(responsePhotoUris) {
         var newPhotoUris = responsePhotoUris.filter(function(i) {return currentPhotoUris.indexOf(i) < 0;});
         if(newPhotoUris.length > 0) {
@@ -38,30 +47,7 @@ $( document ).ready(function() {
             });
         }
     }
-//    var swapThumbnailData = function(link){
-//        var image = link.children("img");
-//        var pom = image.attr("src");
-//
-//        image.attr("src", link.attr("href"));
-//        link.attr("href", pom);
-//    };
-//    $('.container').on('click', '.thumbnail', function(e){
-//        e.preventDefault();
-//        var link = $(this);
-//        if(!link.hasClass("grid")){
-//            swapThumbnailData(link);
-//            link.addClass("grid");
-//        }
-//    });
-//
-//    $('.container').on('click', '.grid', function(e){
-//        e.preventDefault();
-//        var link = $(this);
-//        swapThumbnailData(link);
-//        link.removeClass("grid");
-//    });
 
     getRecentPhotos();
-    //TODO kill setInterval
     setInterval(getRecentPhotos, 5000);
 });
