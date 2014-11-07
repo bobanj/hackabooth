@@ -41,7 +41,10 @@ $( document ).ready(function() {
                 row.prepend(photoHtml);
                 currentPhotoUris.push(photoUrl);
             });
-            row.find("a:first").click();
+            var mostRecentPhoto = row.find("a:first");
+            if (mostRecentPhoto.length){
+                mostRecentPhoto.click();
+            }
         }
         var timeout = setTimeout(function(){
             getRecentPhotos();
