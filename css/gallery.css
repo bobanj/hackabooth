@@ -42,6 +42,7 @@ body {
 	margin: 8px;
     vertical-align:bottom;
     opacity:0;
+    box-shadow : 2px 2px 8px 0px #333333;
 
     max-width:480px;
     max-height:480px;

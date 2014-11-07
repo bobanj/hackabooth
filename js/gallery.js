@@ -25,14 +25,7 @@ function showPhotosCollage (photoUris) {
 			img.attr("src", img.data("uri") + "&grid=1")
 		}
 
-		img.css({
-			"box-shadow" : "2px 2px 8px 0px #333333"
-		})
-
 		$('.photos').prepend(img);
-		if(!currentPhotoUris) {
-			currentPhotoUris = []
-		}
 
 		img.on("click", function() {
 			console.log(img.data("clicked"))
@@ -47,6 +40,9 @@ function showPhotosCollage (photoUris) {
 			$('.photos').collagePlus();
 		})
 
+		if(!currentPhotoUris) {
+			currentPhotoUris = []
+		}
 		currentPhotoUris.push(photoUris[i])
 	}
 	$('.photos').collagePlus();
@@ -90,10 +86,9 @@ function showPhotosPile (photoUris) {
 
 function getRecentPhotos() {
 	$.ajax({
-		url : SERVER_URL + "/recent_images",
+		url : SERVER_URL + "/gallery_images",
 		data: {
-			limit: PHOTO_LIMIT,
-			reverse: true
+
 		},
 		type : "GET",
 		crossDomain: true,
@@ -102,10 +97,6 @@ function getRecentPhotos() {
 }
 
 function processPhotos(responsePhotoUris) {
-	if(currentPhotoUris.length == 0) {
-		//New page! Dirty hack to order pictures!
-		responsePhotoUris = responsePhotoUris.reverse();
-	}
 	var newPhotoUris = responsePhotoUris.filter(function(i) {return currentPhotoUris.indexOf(i) < 0;});
 	if(newPhotoUris.length > 0) {
 		showPhotosCollage(newPhotoUris)
