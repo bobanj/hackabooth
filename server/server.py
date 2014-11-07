@@ -6,9 +6,10 @@ import cgi
 import json
 from os import curdir
 from os.path import join as pjoin
-from pprint import pprint
 import urlparse
 import time
+
+import envoy
 
 from PIL import Image
 
@@ -16,15 +17,38 @@ from PIL import Image
 
 
 
+
 # ---
-import envoy
 
 num_images = 4
 tmp_storage_path = pjoin(curdir, 'tmp_storage')
 storage_path = pjoin(curdir, 'storage')
+images_list_cache = None
 
 # ---
 
+
+def get_images_list():
+    global images_list_cache
+    if images_list_cache:
+        return images_list_cache
+
+    strip_path = pjoin(storage_path, 'strip')
+
+    r = envoy.run('ls ' + strip_path + ' | grep "[.]jpg" | sort -n -r')
+    # pprint('ls '+strip_path+'/*.jpg | sort -n -r')
+    # pprint(r.std_out)
+
+    # from os import listdir
+    # from os.path import isfile, join
+    # files_list = [f for f in listdir(strip_path) if isfile(join(strip_path, f))]
+    # entry_list = fsdir.go(strip_path)
+    entry_list = r.std_out.split('\n')[:-1]
+    files_list = map(lambda f: f.split("/")[-1], entry_list)
+
+    images_list_cache = list(files_list)
+
+    return files_list
 
 def compose_images_strip(uid):
     images = []
@@ -85,22 +109,6 @@ def compose_images_grid(uid):
     canvas = canvas.convert('L')
     canvas.save(image_path, "JPEG", quality=95, optimize=True, progressive=True)
 
-
-def get_images_list():
-    strip_path = pjoin(storage_path, 'strip')
-
-    r = envoy.run('ls '+strip_path+' | grep "[.]jpg" | sort -n -r')
-    # pprint('ls '+strip_path+'/*.jpg | sort -n -r')
-    # pprint(r.std_out)
-
-    # from os import listdir
-    # from os.path import isfile, join
-    # files_list = [f for f in listdir(strip_path) if isfile(join(strip_path, f))]
-    # entry_list = fsdir.go(strip_path)
-    entry_list = r.std_out.split('\n')[:-1]
-    files_list = map(lambda f: f.split("/")[-1], entry_list)
-
-    return files_list
 
 
 # ---
@@ -190,12 +198,14 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
 
-        images_list = map(lambda x: '/image?id=' + x[:-4], images_list[(len(images_list)-limit):])
+        images_list = map(lambda x: '/image?id=' + x[:-4], images_list[(len(images_list) - limit):])
         json_txt = json.dumps(images_list)
         self.wfile.write(json_txt)
         self.wfile.close()
 
     def save_images(self):
+        global images_list_cache
+        
         form = cgi.FieldStorage(
             fp=self.rfile,
             headers=self.headers,
@@ -226,11 +236,11 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
         compose_images_strip(uid)
         compose_images_grid(uid)
 
-        json_data = json.dumps({ 'url': '/image?id=%d' % uid })
+        json_data = json.dumps({'url': '/image?id=%d' % uid})
         # pprint('return url = %s' % return_url)
         self.wfile.write(json_data)
         self.wfile.close()
-
+        images_list_cache = None
         return
 
 # ---
