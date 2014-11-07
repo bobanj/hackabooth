@@ -183,7 +183,7 @@ class ImageUploaderHandler(BaseHTTPRequestHandler):
         compose_images_grid(uid)
 
         return_url = "{ 'url': '/image?id=%d' }" % uid
-        pprint('return url = %s' % return_url)
+        # pprint('return url = %s' % return_url)
         self.wfile.write(return_url)
 
         return

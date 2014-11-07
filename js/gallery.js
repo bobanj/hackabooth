@@ -1,6 +1,8 @@
 var currentPhotoUris = [];
-var SERVER_URL = "http://boban.jovanoski.net:8080";
+var SERVER_URL = "http://hackabooth.jovanoski.net:8080";
 var imgId = 0;
+
+// TODO clean up / refactor
 
 function showPhotosCollage (photoUris) {
 	$(".photo").each(function() {
@@ -9,7 +11,11 @@ function showPhotosCollage (photoUris) {
 		}
 	})
 	for (var i = 0; i < photoUris.length; i++) {
-		var img = $('<img>', { id: imgId, class: 'photo', src: SERVER_URL + photoUris[i] });
+		if(i > 3){
+            // Do not load all images at once
+            return false;
+        }
+        var img = $('<img>', { id: imgId, class: 'photo', src: SERVER_URL + photoUris[i] });
 		imgId++;
 
 		img.data("uri", SERVER_URL + photoUris[i])
@@ -103,6 +109,6 @@ function processPhotos(responsePhotoUris) {
 
 $( document ).ready(function() {
 	//setInterval( function() { showPhotos(["http://placehold.it/" + Math.round(Math.random() * 480) + "x" + Math.round(Math.random() * 480)]) } , 2000);
-	getRecentPhotos()
-	setInterval(getRecentPhotos, 5000)
+	getRecentPhotos();
+	setInterval(getRecentPhotos, 5000);
 });
