@@ -19,7 +19,7 @@ $( document ).ready(function() {
     function getRecentPhotos() {
         console.log("getting stuff");
         $.ajax({
-            url : SERVER_URL + "/recent_images",
+            url : SERVER_URL + "/gallery_images",
             type : "GET",
             crossDomain: true,
             success : processPhotos,
