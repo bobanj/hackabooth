@@ -37,11 +37,9 @@ $( document ).ready(function() {
         var newPhotoUris = responsePhotoUris.filter(function(i) {return currentPhotoUris.indexOf(i) < 0;});
         if(newPhotoUris.length > 0) {
             $.each(newPhotoUris, function(i, photoUrl){
-                if (i < 3){
-                    var photoHtml = generatePhotoHtml(photoUrl);
-                    row.prepend(photoHtml);
-                    currentPhotoUris.push(photoUrl);
-                }
+                var photoHtml = generatePhotoHtml(photoUrl);
+                row.prepend(photoHtml);
+                currentPhotoUris.push(photoUrl);
             });
         }
         var timeout = setTimeout(function(){
